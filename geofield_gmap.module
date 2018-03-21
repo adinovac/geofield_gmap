@@ -24,20 +24,21 @@ function geofield_gmap_menu() {
   return $items;
 }
 
-
 /**
- * Implements hook_field_widget_info_alter().
+ * Implements hook_field_widget_info().
  */
-function geofield_gmap_field_widget_info_alter(&$info) {
-  $info['geofield_gmap'] = array(
-    'label' => t('Google Map'),
-    'field types' => array('geofield'),
-    'settings' => array(
-      'map_type' => 'ROADMAP',
-      'confirm_center_marker' => FALSE,
-      'click_to_place_marker' => FALSE,
+function geofield_gmap_field_widget_info() {
+  return array(
+    'geofield_gmap' => array(
+      'label' => t('Google Map'),
+      'field types' => array('geofield'),
+      'settings' => array(
+        'map_type' => 'ROADMAP',
+        'confirm_center_marker' => FALSE,
+        'click_to_place_marker' => FALSE,
+      ),
+      'module' => 'geofield_gmap',
     ),
-    'module' => 'geofield_gmap',
   );
 }
 
