@@ -1,5 +1,5 @@
 ;(function ($) {
-  Drupal.behaviors.geofieldGeolocation = {
+  Backdrop.behaviors.geofieldGeolocation = {
     attach: function (context, settings) {
 
       if (settings.geofield_gmap) {

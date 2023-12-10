@@ -15,7 +15,7 @@ function geofield_gmap_menu() {
   $items['admin/config/content/geofield_gmap'] = array(
     'title' => 'Geofield Gmap',
     'description' => 'Settings for Geofield Gmap.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('geofield_gmap_admin_settings'),
     'access arguments' => array('administer geofield_gmap'),
     'file' => 'geofield_gmap.admin.inc',
@@ -73,10 +73,12 @@ function geofield_gmap_field_widget_form(&$form, &$form_state, $field, $instance
       $latlon_value['lon'] = floatval($items[$delta]['lon']);
     }
     // Try to fetch data from form state if lon/lat is empty.
+
     if (isset($form_state['input'][$field['field_name']][$langcode][$delta]['geom'])) {
       $latlon_value = $form_state['input'][$field['field_name']][$langcode][$delta]['geom'];
     }
     // If we still have empty lat and long, use the field's default values.
+
     if (!$latlon_value['lat'] || !$latlon_value['lon']) {
       if ($default_field_value = field_get_default_value($base['#entity_type'], $base['#bundle'], $field, $instance, $langcode)) {
         if ($default_geom_value = $default_field_value[0]['geom']) {
@@ -96,7 +98,9 @@ function geofield_gmap_field_widget_form(&$form, &$form_state, $field, $instance
     );
 
     // $element['input_format'] is not a db field, but we use it determine how
+
     // to parse/calculate values in our widget.
+
     $element['input_format'] = array(
       '#type' => 'value',
       '#attributes' => array('class' => array('geofield_input_format')),
@@ -116,15 +120,28 @@ function geofield_gmap_field_widget_form(&$form, &$form_state, $field, $instance
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function geofield_gmap_config_info() {
+  $prefixes['geofield_gmap.settings'] = array(
+    'label' => t('Geofield Gmap settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Callback for afterbuild for widget for js addition.
  */
-function geofield_gmap_widget_gmap_afterbuild($element, &$form_state) {
+function geofield_gmap_widget_gmap_afterbuild($element, $form_state) {
 
   // Retrieve the Google API Key, if there is one.
-  $api_key = variable_get('geofield_gmap_google_api_key');
+
+  $api_key = config_get('geofield_gmap.settings', 'geofield_gmap_google_api_key');
   $api_key_query_param = !empty($api_key) ? '?key=' . $api_key : '';
 
   // Attach GMAP API and autocomplete library.
+
   $element['#attached']['library'][] = array('system', 'ui.autocomplete');
   $element['#attached']['js'][] = array(
     'data' => '//maps.googleapis.com/maps/api/js' . $api_key_query_param,
@@ -145,6 +162,7 @@ function geofield_gmap_widget_gmap_afterbuild($element, &$form_state) {
   $element['geom']['lat']['#prefix'] .= '</div>';
 
   // Attach JS settings.
+
   $element['#attached']['js'][] = array(
     'data' => array('geofield_gmap' => array(
       $gmapid => array(
@@ -166,7 +184,8 @@ function geofield_gmap_widget_gmap_afterbuild($element, &$form_state) {
 
   if (isset($element['geom']['#geofield_gmap_geolocation_override']) && $element['geom']['#geofield_gmap_geolocation_override']) {
     // Add override behavior.
-    $element['#attached']['js'][] = drupal_get_path('module', 'geofield_gmap') . '/geofield_gmap_geolocation_override.js';
+
+    $element['#attached']['js'][] = backdrop_get_path('module', 'geofield_gmap') . '/geofield_gmap_geolocation_override.js';
   }
 
   return $element;
