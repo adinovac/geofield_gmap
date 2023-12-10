@@ -1,8 +1,8 @@
 (function ($) {
-  Drupal.behaviors.geofieldMapInit = {
+  Backdrop.behaviors.geofieldMapInit = {
     attach: function (context, settings) {
 
-      // Init all maps in Drupal.settings.
+      // Init all maps in Backdrop.settings.
       if (settings.geofield_gmap) {
         $.each(settings.geofield_gmap, function(mapid, options) {
           geofield_gmap_initialize({

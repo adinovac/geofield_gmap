@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the geofield_gmap module.
+ *
+ */
+
+
+/**
+ * Migrate geofield_gmap variables to config.
+ */
+function geofield_gmap_update_1000() {
+  $config = config('geofield_gmap.settings');
+  $config->set('geofield_gmap_google_api_key', update_variable_get('geofield_gmap_google_api_key', ''));
+  $config->save();
+
+  update_variable_del('geofield_gmap_google_api_key');
+}
+
+/**
+ * Implements hook_install().
+ */
+function geofield_gmap_install() {
+  // Dynamically generated variable data was detected.
+}
