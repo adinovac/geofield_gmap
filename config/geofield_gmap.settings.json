@@ -1,1 +1,4 @@
-
+{
+    "_config_name": "geofield_gmap.settings",
+    "geofield_gmap_google_api_key": ""
+}
